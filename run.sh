@@ -26,7 +26,7 @@ do_a_ip() {
 
 create_ip() {
     echo "Creating IP: $1" > /dev/tty;
-    result="$(sudo ip address add "$1/64" dev enp7s0 2>&1 || true)";
+    result="$(sudo ip address add "$1/64" dev "${DEV:-eth0}" 2>&1 || true)";
     if ! ( [ -z "$result" ] || echo "$result" | grep -q "File exists"); then
         echo "Creating IP failed: $result" > /dev/tty;
         exit 1;
