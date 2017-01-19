@@ -6,6 +6,7 @@
   "dependencies": {
     "bluebird": "^3.4.7",
     "cheerio": "^0.22.0",
+    "cloudscraper": "git+https://github.com/the-eater/cloudscraper.git",
     "lodash": "^4.17.4"
   },
   "devDependencies": {},
