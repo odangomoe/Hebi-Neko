@@ -54,11 +54,14 @@ sched.init()
         console.log("init failed", e);
     });
 
-setInterval(() => sched.writeSimpleStatus(), 500);
+let writeVal = setInterval(() => sched.writeSimpleStatus(), 500);
 
 function saveLoop() {
     fs.writeFile(config.statusPath, JSON.stringify(sched.status, null, 4), () => {
-        //console.log("====\n\n\n\n\n\n\nSaving status");
+        if (sched.isDepleted && sched.running.length === 0) {
+            clearInterval(writeVal);
+            return;
+        }
         setTimeout(saveLoop, 5000);
     });
 }
