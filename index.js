@@ -23,7 +23,7 @@ const crawler = new Crawler({
     saveTorrentPath: config.torrentSavePath
 });
 
-const status = JSON.parse(fs.readFileSync(config.statusFile));
+const status = JSON.parse(fs.readFileSync(config.statusPath));
 
 if (!status.items) {
     status.items = [];
@@ -36,7 +36,7 @@ const sched = new Scheduler({
 
 proc.on("exit", () => {
     console.log("Writing last changes!");
-    fs.writeFileSync(config.statusFile, JSON.stringify(sched.status, null, 4));
+    fs.writeFileSync(config.statusPath, JSON.stringify(sched.status, null, 4));
 });
 
 proc.on('SIGINT', function () {
@@ -57,7 +57,7 @@ sched.init()
 setInterval(() => sched.writeSimpleStatus(), 500);
 
 function saveLoop() {
-    fs.writeFile(config.statusFile, JSON.stringify(sched.status, null, 4), () => {
+    fs.writeFile(config.statusPath, JSON.stringify(sched.status, null, 4), () => {
         //console.log("====\n\n\n\n\n\n\nSaving status");
         setTimeout(saveLoop, 5000);
     });

@@ -2,6 +2,7 @@
     "site": "https://nyaa.se",
     "torrentSavePath":"/media/example-disk/torrents/%d.torrent",
     "pageSavePath":"/media/example-disk/pages/%d.html",
+    "statusPath":"/media/example-disk/status.json",
     "pagePath":"/?page=view&tid=%d",
     "torrentPath":"/?page=download&tid=%d"
 }
