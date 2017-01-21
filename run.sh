@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 DIR="$(dirname "$0")";
 
+exec 3>&1
+
 set -e;
 
 do_a_ip() {
@@ -12,23 +14,27 @@ do_a_ip() {
     local ip="";
 
 
-    echo "Spawning IPs"
+    log "Spawning IPs"
     while read number; do
         ip="$start_ip:$(printf "%x" "${number}" | colonize)"
         create_ip "${ip}";
         ips="${ips},${ip}";
-        echo "$number = $ip = $(echo -n "$ips" | wc -c)";
+        log "$number = $ip = $(echo -n "$ips" | wc -c)";
     done <<< "$(seq "$start" "$to")"
 
-    echo "Running Hebi-Neko";
+    log "Running Hebi-Neko";
     node "$DIR/index.js" "$(echo "$ips" | sed 's/,$//')"
 }
 
+log() {
+    echo $@ 1>&3;
+}
+
 create_ip() {
-    echo "Creating IP: $1" > /dev/tty;
+    log "Creating IP: $1";
     result="$(sudo ip address add "$1/64" dev "${DEV:-eth0}" 2>&1 || true)";
     if ! ( [ -z "$result" ] || echo "$result" | grep -q "File exists"); then
-        echo "Creating IP failed: $result" > /dev/tty;
+        log "Creating IP failed: $result";
         exit 1;
     fi
     #true;
